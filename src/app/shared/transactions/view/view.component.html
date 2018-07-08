@@ -1,0 +1,51 @@
+<div *ngIf="transactions?.length > 0; else noTransactions">
+  <ul class="list-group mb-3">
+    <li *ngFor="let record of transactions" (dblclick)="deleteTransaction($event, record)" class="list-group-item d-flex justify-content-between lh-condensed">
+      <div>
+        <h6 class="my-0">{{ record.nature | titlecase }}</h6>
+        <small class="text-muted d-inline-block text-truncate" style="max-width: 140px;">
+          {{ record.description | titlecase }}
+        </small>
+      </div>
+      <strong class="small d-block text-gray-dark">GHS {{ record.price * record.qty }}</strong>
+        
+        <!-- <a class="text-light btn btn-primary btn-sm mr-2">
+          <i (click)="editTransaction($event, record)" class="far fa-edit fa-1x"></i>
+        </a>
+        <a class="text-light btn btn-danger btn-sm">
+          <i (click)="deleteTransaction($event, record)" class="far fa-trash-alt fa-1x"></i>
+        </a> -->
+
+        <!-- <a class="text-light btn btn-primary btn-sm mr-2">
+            <i class="far fa-edit fa-1x"></i>
+        </a>
+        <a class="text-light btn btn-danger btn-sm">
+            <i class="far fa-trash-alt fa-1x"></i>
+        </a> -->
+
+      <div *ngIf="editState && transactionToEdit.id === record.id">
+        <form (ngSubmit)="updateTransaction(record)">
+          <div class="row">
+            <div class="input-field col s6">
+              <input type="text" name="date" placeholder="Edit Date" [(ngModel)]="record.date">
+            </div>
+            <div class="input-field col s6">
+              <input type="text" name="description" placeholder="Edit Description" [(ngModel)]="record.description">
+            </div>
+            <input type="submit" class="text-light btn btn-primary btn-sm" value="Update Transaction">
+            <button class="text-light btn btn-danger btn-sm" (click)="deleteTransaction($event, record)">Delete Transaction</button>
+          </div>
+        </form>
+      </div>
+    </li>
+    <a href="#" class="btn btn-default btn-block">View all</a>
+  </ul>
+</div>
+
+<ng-template #noTransactions>
+  <div class="p-3 bg-white rounded box-shadow">
+    <div class="alert alert-warning" role="alert">
+      You have not posted a transaction yet.
+    </div>
+  </div>
+</ng-template>

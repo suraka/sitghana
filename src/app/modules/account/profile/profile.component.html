@@ -1,0 +1,152 @@
+<div [@routerTransition]>
+  <section class="jumbotron bg-light-blue">
+    <div class="container">
+      <div class="row text-light">
+        <div class="col-sm-12 col-md-6">
+          <div *ngIf="authService.user | async as user">
+            <h3>Welcome, {{ user.displayName | titlecase }}</h3>
+            <p>{{ user.email }}</p>
+            <button class="btn btn-danger" (click)="authService.signOut()">
+              <i class="fas fa-lock"></i> Logout
+            </button>
+            
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 border-left">
+          <h3>Subscriptions</h3>
+          <div *ngIf="subscriptions.length < 1" class="alert alert-warning" role="alert">
+              Please subscribe to any of our products to enjoy an amazing expirience. Thank you!
+          </div>
+          <div *ngIf="subscriptions.length === 1 && subscriptions[0].confirm">
+            <div class="mb-1 text-light">{{ subscriptions[0].expires }} day(s) remaining</div>
+          </div>
+          <div *ngIf="subscriptions.length === 1 && !subscriptions[0].confirm" class="alert alert-success" role="alert">
+              Please make pament to this MTN number <b>0555980771</b> to complete the process. Your business will be setup shortly after the payment. Thank you!
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container album py-5">
+    <div class="row">
+      <div class="col-md-6">
+          <!-- <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert> -->
+          <div *ngIf="subscriptions.length === 1 && !subscriptions[0].confirm" class="alert alert-success" role="alert">
+              Please make pament to this MTN number <b>0555980771</b> to complete the process. Your business will be setup shortly after the payment. Thank you!
+          </div>
+          <div class="card flex-md-row mb-4 box-shadow h-md-250">
+          <div class="card-body d-flex flex-column align-items-start">
+            <div *ngIf="subscriptions.length < 1">
+              <h3 class="mb-0">
+                <a class="text-dark" [routerLink]="['./../subscription']" [queryParams]="{ package: 'accounting' }">Accounting Software</a>
+              </h3>
+              <p class="card-text mb-auto">
+                This is used in keeping and analyzing of financial records. The folowing list are the key components of this software:
+              </p>
+              <ol>
+                <li>Trial Balance</li>
+                <li>Trading, Profit and Loss A/C</li>
+                <li>Balance Sheet and more</li>
+              </ol>
+              <a class="btn btn-link" [routerLink]="['./../subscription']" [queryParams]="{ package: 'accounting' }">Get started</a>
+            </div>
+            <div *ngIf="subscriptions.length === 1 && subscriptions[0].confirm">
+              <h3 class="mb-0">
+                <a class="text-dark" [routerLink]="['./../dashboard']" [queryParams]="{ bid: subscriptions[0].bid, id: subscriptions[0].uid }">Accounting Software</a>
+              </h3>
+              <div class="mb-1 text-muted">{{ subscriptions[0].expires }} day(s) remaining</div>
+              <p class="card-text mb-auto">
+                Click the button below to use your software.
+              </p>
+              <a class="btn btn-outline-dark  btn-lg btn-block text-center mt-6" [routerLink]="['./../dashboard']" [queryParams]="{ bid: subscriptions[0].bid, id: subscriptions[0].uid }">
+                <i class="fas fa-book-open"></i> Open
+              </a>
+            </div>
+            <div *ngIf="subscriptions.length === 1 && !subscriptions[0].confirm">
+              <p class="card-text mb-auto">
+                If payment is made please wait for our team to confirm payment. The accounting software will be ready after confirmation.
+              </p>
+              <a class="btn btn-link disabled" [routerLink]="['./../dashboard']" [queryParams]="{ bid: subscriptions[0].bid, id: subscriptions[0].uid }">
+                <i class="fas fa-book-open"></i> Open
+              </a>
+            </div>
+          </div>
+          <img class="card-img-right flex-auto d-none d-lg-block" src="./assets/sky.png" alt="Accounting Softwar">
+        </div>
+
+        <!-- <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Accounting Software</h4>
+          </div>
+          <div class="card-body">
+            <p class="card-text">This is used in keeping and analyzing of financial records. The folowing list are the key components of this software:</p>
+            <ol>
+              <li>Trial Balance</li>
+              <li>Trading, Profit and Loss A/C</li>
+              <li>Balance Sheet</li>
+              <li>Income Statement</li>
+              <li>Cash Flow Statement</li>
+              <li>Ratio Analysis</li>
+            </ol>
+          </div>
+        </div> -->
+      </div>
+      <div class="col-md-6"> <!-- *ngIf="subscriptionService.subscription | async as subscription" -->
+        <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <h3 class="mb-0">
+                <a class="text-dark">Payroll Software</a>
+              </h3>
+              <br><br>
+              <!-- <div class="mb-1 text-muted">Nov 11</div> -->
+              <h2 class="card-text text-muted mt-6">Coming Soon</h2>
+            </div>
+            <img class="card-img-right flex-auto d-none d-lg-block" src="./assets/vine.png" alt="Accounting Softwar">
+          </div>
+        <!-- <div *ngIf="subscriptions?.length > 0; else noSubscriptions">
+          <div *ngFor="let subscription of subscriptions" class="text-center">
+            <h4 class="my-4 font-weight-normal">Accounting Software</h4>
+            <p>{{ subscription.expires }} days remaining</p>
+            <p *ngIf="subscription.package == 'trial'">Enjoy your free trial. Please do not forget to subscribe after the trial expires. Thank you for choosing our product.</p>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" *ngIf="subscription.expires == 0" (click)="subscriptionService.subscribe()" class="btn btn-lg btn-block btn-outline-primary">
+                  Renew
+                </button>
+                <button *ngIf="subscription.package == 'trial'" (click)="subscriptionService.subscribe()" class="btn btn-lg btn-outline-success">
+                  Upgrade
+                </button>
+                <button *ngIf="subscription.expires > 0" [routerLink]="['./../dashboard']" class="btn btn-lg btn-outline-primary">
+                  Open Software
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noSubscriptions class="text-center">
+          <h4 class="my-0 font-weight-normal">Subscribe to Accounting Software</h4>
+          <hr>
+          <button class="btn btn-warning btn-lg" (click)="subscriptionService.subscribe()">Subscribe</button>
+        </ng-template> -->
+
+        <!-- <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Payroll</h4>
+          </div>
+          <div class="card-body">
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary">Subscribe</button>
+                <button type="button" class="btn btn-sm btn-outline-danger">Unsubscribe</button>
+              </div>
+              <small class="text-muted">9 mins</small>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,153 @@
+<app-sidebar></app-sidebar>
+<section class="main-container">
+  <div [@routerTransition]>
+    
+    <form class="form-inline">
+        <h2 class="text-muted">Manufacturing A/C</h2>
+      <div class="form-group">
+        <div class="input-group">
+          <label for="from">From</label>
+          <input class="form-control ml-2" placeholder="yyyy-mm-dd"
+                  name="d2" #c2="ngModel" [(ngModel)]="fromDate" (navigate)="date = $event.next" ngbDatepicker #d2="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+              <i class="fas fa-calendar-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group ml-4">
+          <label for="from">To</label>
+          <input class="form-control ml-2" placeholder="yyyy-mm-dd"
+                  name="d3" #c3="ngModel" nzSize="small" [(ngModel)]="toDate" ngbDatepicker #d3="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="d3.toggle()" type="button">
+              <i class="fas fa-calendar-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button nz-button nzType="primary" nzShape="circle" class="ml-3">
+          <i class="anticon anticon-printer"></i>
+        </button>
+    </form>
+    
+    <hr />
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="d-flex justify-content-center">
+          <div class="p-1 bd-highlight text-center">
+            <h4 class="font-weight-bold">{{ businesses[0].businessName | titlecase }}</h4>
+            <h5 class="font-weight-normal">Manufacturing Account</h5>
+            <p>for the year ended {{ toDate.day + '/' + toDate.month + '/' + toDate.year }}</p>
+          </div>
+        </div>
+        <hr/>
+        
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight text-center font-weight-bold">GHS</div>
+          <div class="col-1 p-2 bd-highlight text-center font-weight-bold">GHS</div>
+          <div class="col-1 p-2 bd-highlight text-center font-weight-bold">GHS</div>
+        </div>
+      
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight font-weight-bold">Cost of Raw Materials Consumed:</div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">Opening inventory of raw materials</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">0</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+        </div>
+
+        <div *ngIf="purchaseAmount" class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">Purchase of raw materials</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">{{ purchaseAmount }}</div>
+          <div *ngIf="!carriage" class="col-1 p-2 bd-highlight text-center"></div>
+        </div>
+
+        <div *ngIf="carriage" class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">Carriage on raw materials</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div  class="col-1 p-2 bd-highlight text-center border border-top-0 border-right-0 border-left-0 border-dark">{{ carriage }}</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+        </div>
+
+        <div *ngIf="purchaseAmount && !carriage" class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center border border-bottom-0 border-right-0 border-left-0 border-dark">{{ purchaseAmount }}</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+        </div>
+
+        <div *ngIf="purchaseAmount && carriage" class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">{{ purchaseAmount + carriage }}</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+        </div>
+
+        <div *ngIf="closingInventory" class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">Less closing inventory of raw materials</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center border border-top-0 border-right-0 border-left-0 border-dark">({{ closingInventory }})</div>
+          <div class="col-1 p-2 bd-highlight text-center">{{ purchaseAmount + carriage - closingInventory }}</div>
+        </div>
+
+        <div class="d-flex bd-highlight" *ngFor="let direct of directCost">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">{{ direct.name | titlecase }}</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">{{ direct.amount }}</div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight border border-bottom-0 border-right-0 border-left-0 border-dark"></div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight font-weight-bold">Prime cost</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">{{ purchaseAmount + carriage - closingInventory + totalDirectCost }}</div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight font-weight-bold">Add factory overheads:</div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+        </div>
+          
+        <div class="d-flex bd-highlight" *ngFor="let indirect of indirectCost">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight">{{ indirect.name | titlecase }}</div>
+          <div class="col-1 p-2 bd-highlight text-center"></div>
+          <div class="col-1 p-2 bd-highlight text-center">
+            {{ indirect.amount }}
+          </div>
+          <div
+            class="col-1 p-2 bd-highlight text-center"
+            *ngIf="indirectCost[indirectCost.length-1].id === indirect.id">
+            {{ totalIndirectCost }}
+          </div>
+        </div>
+
+        <div class="d-flex bd-highlight">
+          <div class="col-9 p-2 flex-grow-1 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight"></div>
+          <div class="col-1 p-2 bd-highlight text-center border border-bottom-0 border-right-0 border-left-0 border-dark">{{ purchaseAmount + carriage - closingInventory + totalDirectCost + totalIndirectCost }}</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>  

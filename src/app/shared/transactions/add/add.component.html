@@ -1,0 +1,122 @@
+
+    <div class="col-md-12 order-md-1 mt-3">
+      <form (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="dateForm">Date of transaction</label>
+            <input type="date" [(ngModel)]="entry.date" name="date" class="form-control" id="dateForm" required>
+            <div class="invalid-feedback">
+              Valid date is required.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mb-3">
+          <label for="description">Description</label>
+          <input type="text" [(ngModel)]="entry.description" name="description" class="form-control" id="description" placeholder="e.g.: purchase cement from Mr. Joe" required>
+          <div class="invalid-feedback" style="width: 100%;">
+              Description is required.
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-5 mb-3">
+            <label for="nature">Nature of transaction</label>
+            <select [(ngModel)]="entry.nature" name="nature" class="custom-select d-block w-100" id="nature" required>
+              <option  *ngFor="let type of nature" [value]="type">{{ type | titlecase }}</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select.
+            </div>
+          </div>
+
+          <div class="col-md-5 mb-3">
+            <label for="category">Category</label>
+            <select [(ngModel)]="entry.category" *ngIf="entry.nature === 'assets'" name="category" class="custom-select d-block w-100" id="nature" required>
+              <hr>
+              <option disabled>{{ assets[0] + ':' | uppercase }}</option>
+              <hr>
+              <option class="text-dark" *ngFor="let fixed of fixedAssets" [value]="fixed">{{ fixed | titlecase }}</option>
+              <hr>
+              <option disabled>{{ assets[1] + ':' | uppercase }}</option>
+              <hr>
+              <option class="text-dark" *ngFor="let current of currentAssets" [value]="current">{{ current | titlecase }}</option>
+            </select>
+
+            <select [(ngModel)]="entry.category" *ngIf="entry.nature === 'liabilities'" name="category" class="custom-select d-block w-100" id="nature" required>
+              <hr>
+              <option disabled>{{ liabilities[0] + ':' | uppercase }}</option>
+              <hr>
+              <option class="text-dark" *ngFor="let currentLiability of currentLiabilities" [value]="currentLiability">{{ currentLiability | titlecase }}</option>
+              <hr>
+              <option disabled>{{ liabilities[1] + ':' | uppercase }}</option>
+              <hr>
+              <option class="text-dark" *ngFor="let longTermLiability of longTermLiabilities" [value]="longTermLiability">{{ longTermLiability | titlecase }}</option>
+            </select>
+
+            <select [(ngModel)]="entry.category" *ngIf="entry.nature === 'expenses'" name="category" class="custom-select d-block w-100" id="nature" required>
+              <option class="text-dark" *ngFor="let expense of expenses" [value]="expense">{{ expense | titlecase }}</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select.
+            </div>
+          </div>
+        </div>
+        <!-- <hr class="mb-4">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="same-address">
+          <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="save-info">
+          <label class="custom-control-label" for="save-info">Save this information for next time</label>
+        </div> -->
+        <hr class="mb-4">
+
+        <h4 class="mb-3">Payment</h4>
+
+        <div class="d-block my-3">
+          <div class="custom-control custom-checkbox">
+            <input [(ngModel)]="entry.cashPayment" id="cashpayment" name="cashpayment" type="checkbox" class="custom-control-input">
+            <label class="custom-control-label" for="cashpayment">Cash</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input [(ngModel)]="entry.creditPayment" id="creditpayment" name="creditpayment" type="checkbox" class="custom-control-input">
+            <label class="custom-control-label" for="creditpayment">Credit</label>
+          </div>
+          <!-- <div class="custom-control custom-radio">
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="paypal">Both Cash & Credit</label>
+          </div> -->
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="qty">Quantity</label>
+            <input type="number" [(ngModel)]="entry.qty" name="qty" class="form-control" id="qty" placeholder="" required>
+            <small class="text-muted">{{ entry.qty }} items</small>
+            <div class="invalid-feedback">
+              Quantity is required
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="price">Price</label>
+            <input type="number" [(ngModel)]="entry.price" name="price" class="form-control" id="price" placeholder="" required>
+            <small class="text-muted">GHS {{ entry.price }} per item</small>
+            <div class="invalid-feedback">
+              Price is required
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="amt">Amount GHS</label>
+            <input readonly type="number" name="amt" class="form-control" id="amt" value="{{entry.price * entry.qty}}" required>
+          </div>
+
+        </div>
+        
+        <hr class="mb-4">
+        <button class="btn btn-outline-success mb-3 font-weight-normal" type="submit">
+            <i class="fab fa-pushed"></i> Add Transaction
+        </button>
+      </form>
+    </div>

@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="row flex-items-xs-middle">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Subscription</h1>
+        <p class="lead">Follow through and provide the right infomation about your business</p>
+      </div>
+      
+      <div class="container">
+        <form (ngSubmit)="businesSetup()" novalidate>
+          <h3>Business Info</h3>
+          <hr>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="businessName">Business name</label>
+              <input type="text" [(ngModel)]="entry.businessName" name="businessName" class="form-control" id="businessName" required>
+              <div class="invalid-feedback">
+                Valid business name is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="website">Website <span class="text-muted">(optional)</span></label>
+              <input type="text" [(ngModel)]="entry.website" name="website" class="form-control" id="website">
+              <div class="invalid-feedback">
+                Valid website address is required.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="category">Category</label>     
+              <select [(ngModel)]="entry.category" name="category" class="form-control" required>
+                <option *ngFor="let category of categories" value="{{ category }}">{{ category | titlecase}}</option>
+              </select>       
+              <div class="invalid-feedback" style="width: 100%;">
+                Business category is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <small class="text-muted">You may select both manufacturing and trading</small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="entry.manufacturing" name="manufacturing" id="manufacturing">
+                <label class="form-check-label" for="manufacturing">
+                  Is your business into manufacturing?
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="entry.trading" name="trading" id="trading">
+                <label class="form-check-label" for="trading">
+                  Is your business into trading?
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="phone">Phone</label>             
+            <span class="text-muted ml-2">(please enter a valid mobile money number you wish to use for payment)</span>
+            <input type="text" [(ngModel)]="entry.phone" name="phone" class="form-control" id="phone" required>
+            <div class="invalid-feedback" style="width: 100%;">
+              Your phone number is required.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email">Email <span class="text-muted">(optional)</span></label>
+            <input type="email" [(ngModel)]="entry.email" name="email" class="form-control" id="email">
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="about">About</label>
+            <textarea [(ngModel)]="entry.about" name="about" class="form-control" id="about" rows="3" required></textarea>
+            <div class="invalid-feedback">
+              Please enter detail information about your business.
+            </div>
+          </div>
+
+          <hr class="mb-4">
+          <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </form>
+      
+        <p *ngIf="(subscriptionService.bid !== '') && !payment">
+            We welcome you to use this software as a <b>free trial</b> for the next 30 days!
+        </p>
+        <p *ngIf="(subscriptionService.bid !== '') && payment > 0">
+          Please pay {{ payment | currency:'GHS' | number:'1.1-2' }} to this MTN mobile money number <b>{{ setting.phone }}</b>. Add this number <b>{{ subscriptionService.bid | number:'6.0'}}</b> Your software will be setup after the payment is done. Setup may take upto 5 hours!
+        </p>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>

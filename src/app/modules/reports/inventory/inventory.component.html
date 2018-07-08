@@ -1,0 +1,278 @@
+<app-sidebar></app-sidebar>
+<section class="main-container">
+  <div [@routerTransition]>
+    <h2 class="text-muted">Inventory Management System</h2>
+    <hr />
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <label for="from">From</label>
+              <input class="form-control ml-2" placeholder="yyyy-mm-dd"
+                      name="d2" #c2="ngModel" [(ngModel)]="fromDate" (navigate)="defaultFromDate = $event.next" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                  <i class="fas fa-calendar-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="input-group ml-4">
+              <label for="from">To</label>
+              <input class="form-control ml-2" placeholder="yyyy-mm-dd" name="d3" #c3="ngModel" [(ngModel)]="toDate" (navigate)="defaultToDate = $event.next" ngbDatepicker #d3="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d3.toggle()" type="button">
+                  <i class="fas fa-calendar-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr /> -->
+        <button
+          nz-button nzType="primary"
+          class="editable-add-btn mr-3"
+          (click)="createInventoryModal(inventoryModalTitle, inventoryModalContent, inventoryModalFooter)">
+          <i class="anticon anticon-plus-circle"></i> Add inventory
+        </button>
+        <button
+          nz-button nzType="primary"
+          class="editable-add-btn mr-3"
+          (click)="createAuditInventoryModal(auditInventoryModalTitle, auditInventoryModalContent, auditInventoryModalFooter)">
+          <i class="anticon anticon-retweet"></i> Audit inventory
+        </button>
+        <button nz-button nzType="primary" nzShape="circle" class="mr-3">
+          <i class="anticon anticon-printer"></i>
+        </button>
+        <button
+          nz-button nzType="danger"
+          class="editable-add-btn float-right"
+          (click)="createDamageInventoryModal(damageInventoryModalTitle, damageInventoryModalContent, damageInventoryModalFooter)">
+          <i class="anticon anticon-close-circle-o"></i> Damage inventory
+        </button>
+        <hr/>
+        
+        <nz-table
+          #ajaxTable
+          nzShowSizeChanger
+          [nzFrontPagination]="false"
+          [nzData]="dataSet"
+          [nzLoading]="loading"
+          [nzTotal]="total"
+          [(nzPageIndex)]="pageIndex"
+          [(nzPageSize)]="pageSize"
+          (nzPageIndexChange)="searchData()"
+          (nzPageSizeChange)="searchData(true)">
+          <thead (nzSortChange)="sort($event)" nzSingleSort>
+            <tr>
+              <th nzShowSort nzSortKey="date">Date</th>
+              <th nzShowSort nzSortKey="name">Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th nzShowFilter [nzFilters]="filterSupplier" (nzFilterChange)="updateFilter($event)">Supplier</th>
+              <th><span>Action</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of ajaxTable.data">
+              <td>{{ data.created | dateFormat }}</td>
+              <td>{{ data.rawMaterial.name | titlecase }}</td>
+              <td>{{ data.quantity }}</td>
+              <td>{{ data.price }}</td>
+              <td>{{ data.supplier.name | titlecase }}</td>
+              <td>{{ 'Save' }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+      </div>
+      <div class="col-lg-4"></div>
+    </div>
+    <!-- Add Inventory Modal Form -->
+    <form nz-form [formGroup]="addNewInventoryForm">
+      <ng-template #inventoryModalTitle>
+          <span>{{ 'Add New Inventory' }}</span>
+      </ng-template>
+      <ng-template #inventoryModalContent>
+          <!-- <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Date purchase</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-date-picker [nzSize]="large"></nz-date-picker>
+                <nz-form-explain *ngIf="addNewInventoryForm.get('price').dirty && addNewInventoryForm.get('price').hasError('required')">
+                    Please input price!
+                </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item> -->
+          <nz-form-item>
+            <nz-form-label [nzSpan]="7">Select</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+              <nz-radio-group formControlName="inventory" nzName="radiogroup">
+                <label nz-radio nzValue="materials">Raw Materials</label>
+                <label nz-radio nzValue="wips">Work in Progress</label>
+                <label nz-radio nzValue="goods">Finished Goods</label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="addNewInventoryForm.value['inventory'] === 'materials'">
+            <nz-form-label [nzSpan]="7" nzRequired>Raw Material</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="rawMaterial" placeholder="Select a raw material">
+                  <nz-option *ngFor="let material of rawMaterials" nzValue="{{material.id+'-'+material.rawMaterial+'-'+material.supplier.id+'-'+material.supplier.name}}" nzLabel="{{material.rawMaterial}}"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewInventoryForm.get('rawMaterial').dirty && addNewInventoryForm.get('rawMaterial').errors ">
+                    <ng-container *ngIf="addNewInventoryForm.get('rawMaterial').hasError('required')">
+                      Please select raw material's name!
+                    </ng-container>
+                </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="addNewInventoryForm.value['inventory'] === 'wips'">
+            <nz-form-label [nzSpan]="7" nzRequired>Work in Progress</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="wip" placeholder="Select finished goods">
+                  <nz-option *ngFor="let work of workInProgress" nzValue="{{work.id+'-'+work.name}}" nzLabel="{{work.name}}"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewInventoryForm.get('wip').dirty && addNewInventoryForm.get('wip').errors ">
+                    <ng-container *ngIf="addNewInventoryForm.get('wip').hasError('required')">
+                      Please select work in progress!
+                    </ng-container>
+                </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="addNewInventoryForm.value['inventory'] === 'goods'">
+            <nz-form-label [nzSpan]="7" nzRequired>Finished Goods</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="finishedGood" placeholder="Select finished goods">
+                  <nz-option *ngFor="let goods of finishedGoods" nzValue="{{goods.id+'-'+goods.name}}" nzLabel="{{goods.name}}"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewInventoryForm.get('finishedGood').dirty && addNewInventoryForm.get('finishedGood').errors ">
+                    <ng-container *ngIf="addNewInventoryForm.get('finishedGood').hasError('required')">
+                      Please select finished goods!
+                    </ng-container>
+                </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Quantity</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <input nz-input formControlName="quantity" placeholder="Enter quantity" type="number">
+                  <nz-form-explain *ngIf="addNewInventoryForm.get('quantity').dirty && addNewInventoryForm.get('quantity').errors">
+                      <ng-container *ngIf="addNewInventoryForm.get('quantity').hasError('required')">
+                          The input is not a valid number!
+                      </ng-container>
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Price</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <input nz-input formControlName="price" placeholder="Enter price" type="number">
+                  <nz-form-explain *ngIf="addNewInventoryForm.get('price').dirty && addNewInventoryForm.get('price').hasError('required')">
+                      Please input price!
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+      </ng-template>
+      <ng-template #inventoryModalFooter>
+          <button nz-button nzType="danger" (click)="closeInventoryModal()">Close</button>
+          <button nz-button (click)="resetNewInventoryForm($event)">Reset</button>
+          <button nz-button nzType="primary" (click)="processingNewInventory()" [disabled]="!addNewInventoryForm.valid" [nzLoading]="inventoryModalButtonLoading">
+              Add {{ addNewInventoryForm.value['name'] | titlecase }}
+          </button>
+      </ng-template>
+    </form>
+    <!-- End Add Inventory Modal -->
+
+    <!-- Audit Inventory Modal Form -->
+    <form nz-form [formGroup]="auditInventoryForm">
+      <ng-template #auditInventoryModalTitle>
+          <span>{{ 'Audit Inventory' }}</span>
+      </ng-template>
+      <ng-template #auditInventoryModalContent>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Raw Material</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <nz-select nz-input formControlName="rawMaterial" placeholder="Select a raw material">
+                    <nz-option *ngFor="let material of rawMaterials$" nzValue="{{material.id+'-'+material.rawMaterial+'-'+material.supplier.id+'-'+material.supplier.name}}" nzLabel="{{material.rawMaterial}}"></nz-option>
+                  </nz-select>
+                  <nz-form-explain *ngIf="auditInventoryForm.get('rawMaterial').dirty && auditInventoryForm.get('rawMaterial').errors ">
+                      <ng-container *ngIf="auditInventoryForm.get('rawMaterial').hasError('required')">
+                        Please input raw material's name!
+                      </ng-container>
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Quantity</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <input nz-input formControlName="quantity" placeholder="Enter quantity" type="number">
+                  <nz-form-explain *ngIf="auditInventoryForm.get('quantity').dirty && auditInventoryForm.get('quantity').errors">
+                      <ng-container *ngIf="auditInventoryForm.get('quantity').hasError('required')">
+                          The input is not a valid number!
+                      </ng-container>
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+      </ng-template>
+      <ng-template #auditInventoryModalFooter>
+          <button nz-button nzType="danger" (click)="closeAuditInventoryModal()">Close</button>
+          <button nz-button (click)="resetAuditInventoryForm($event)">Reset</button>
+          <button nz-button nzType="primary" (click)="processingAuditInventory()" [disabled]="!auditInventoryForm.valid" [nzLoading]="auditInventoryModalButtonLoading">
+            Submit
+          </button>
+      </ng-template>
+    </form>
+    <!-- End Audit Inventory Modal -->
+
+    <!-- Damage Inventory Modal Form -->
+    <form nz-form [formGroup]="damageInventoryForm">
+      <ng-template #damageInventoryModalTitle>
+          <span>{{ 'Damage Inventory' }}</span>
+      </ng-template>
+      <ng-template #damageInventoryModalContent>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Raw Material</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <nz-select nz-input formControlName="rawMaterial" placeholder="Select a raw material">
+                    <nz-option *ngFor="let material of rawMaterials$" nzValue="{{material.id+'-'+material.rawMaterial+'-'+material.supplier.id+'-'+material.supplier.name}}" nzLabel="{{material.rawMaterial}}"></nz-option>
+                  </nz-select>
+                  <nz-form-explain *ngIf="damageInventoryForm.get('rawMaterial').dirty && damageInventoryForm.get('rawMaterial').errors ">
+                      <ng-container *ngIf="damageInventoryForm.get('rawMaterial').hasError('required')">
+                        Please input raw material's name!
+                      </ng-container>
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>Quantity</nz-form-label>
+              <nz-form-control [nzSpan]="12" nzHasFeedback>
+                  <input nz-input formControlName="quantity" placeholder="Enter quantity" type="number">
+                  <nz-form-explain *ngIf="damageInventoryForm.get('quantity').dirty && damageInventoryForm.get('quantity').errors">
+                      <ng-container *ngIf="damageInventoryForm.get('quantity').hasError('required')">
+                          The input is not a valid number!
+                      </ng-container>
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2"></nz-form-label>
+            <nz-form-control [nzSpan]="19">
+              <nz-alert
+                nzType="info"
+                nzMessage="Notice!"
+                nzDescription="The selected inventory will be marked as damage and record the quantity involve in accordance to loss/damage of inventory treatment in manufacturing.">
+              </nz-alert>
+            </nz-form-control>
+          </nz-form-item>
+      </ng-template>
+      <ng-template #damageInventoryModalFooter>
+          <button nz-button nzType="danger" (click)="closeDamageInventoryModal()">Close</button>
+          <button nz-button (click)="resetDamageInventoryForm($event)">Reset</button>
+          <button nz-button nzType="primary" (click)="processingDamageInventory()" [disabled]="!damageInventoryForm.valid" [nzLoading]="damageInventoryModalButtonLoading">
+            Submit
+          </button>
+      </ng-template>
+    </form>
+    <!-- End Audit Inventory Modal -->
+  </div>
+</section>  

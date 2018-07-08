@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="row flex-items-xs-middle">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h1 class="display-4">Pricing</h1>
+      <p class="lead">Quickly prepare an effective financial statement with SitGhana Accounting Software. You can prepare all your accounts with little customization. Select the package that best suit your needs.</p>
+    </div>
+          
+    <div class="container">
+      <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Free Package</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">GHS 0 </h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>1 user only</li>
+              <li>Unlimited P & L A/C</li>
+              <li>Unlimited Balance Sheet</li>
+              <li>1 week support only</li>
+              <li>30 days free trial</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <button [routerLink]="['./../payment']" [queryParams]="{ package: 'accounting', subscribe: 'free' }" class="btn btn-lg btn-block btn-primary">Subscribe</button>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Pro Package</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">GHS 150 <small class="text-muted">/ year</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>5 users maximum</li>
+              <li>Unlimited P & L A/C</li>
+              <li>Unlimited Balance Shee</li>
+              <li>1 year support only</li>
+              <li>Budget Statement</li>
+              <li>Income Statement</li>
+              <li>24/7 available</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <button [routerLink]="['./../payment']" [queryParams]="{ package: 'accounting', subscribe: 'pro' }" class="btn btn-lg btn-block btn-primary">Subscribe</button>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Premium Package</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">GHS 220 <small class="text-muted">/ year</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Users Unlimited</li>
+              <li>Unlimited P & L A/C</li>
+              <li>Unlimited Balance Shee</li>
+              <li>10 years support</li>
+              <li>Unlimited Budget Statements</li>
+              <li>Unlimited Income Statements</li>
+              <li>24/7 available</li>
+              <li>Phone and email support</li>
+              <li>Help center access</li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <button [routerLink]="['./../payment']" [queryParams]="{ package: 'accounting', subscribe: 'premium' }" class="btn btn-lg btn-block btn-primary">Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+</div>

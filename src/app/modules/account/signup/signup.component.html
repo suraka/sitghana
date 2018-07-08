@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="row flex-items-xs-middle">
+        <div class="col-sm-12 col-md-4"></div>
+        <div class="col-sm-12 col-md-4">
+            
+            <h4 class="text-center font-weight-normal mt-4">Sign up</h4>
+            <hr>
+            
+            <ng-container *ngIf="(authService.user | async) || {} as user">
+            <form [formGroup]="signupForm" *ngIf="!user.uid" (ngSubmit)="signup()">
+                <div class="mb-3">
+                    <label for="fullName">Full name</label>
+                    <input type="text" formControlName="fullname" class="form-control" id="fullName" required>
+                    <div class="invalid-feedback" *ngIf="phone.fullname">
+                        Valid name is required.
+                    </div>
+                </div>
+          
+                <div class="mb-3">
+                    <label for="phone">Phone</label>            
+                    <input type="text" formControlName="phone" class="form-control" id="phone" required>
+                    <div class="invalid-feedback" *ngIf="phone.invalid">
+                        Your phone number is required.
+                    </div>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" formControlName="email" class="form-control" id="email" required>
+                    <div class="invalid-feedback" *ngIf="email.invalid && email.dirty">
+                        Your email doesn't look quite right...
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" formControlName="password" class="form-control" id="password" required>
+                    <div class="invalid-feedback" *ngIf="password.invalid && password.touched">
+                        Password must be between 6 and 24 chars and have at least one number 
+                    </div>
+                </div>
+
+                <!-- <div *ngIf="signupForm.valid" >Form looks good! Let's do this.</div> -->
+
+                <button type="submit" [disabled]="!signupForm.valid" class="btn btn-success btn-block">Sign up</button>
+            </form>
+            </ng-container>
+            <br>
+            <a class="btn btn-link btn-block" [routerLink]="['./../login']">Already have an account</a>
+            <hr>
+            <button class="btn btn-primary btn-block" (click)="authService.googleLogin()">
+                <i class="fab fa-google"></i> Log in with Google
+            </button>
+        </div>
+        <div class="col-sm-12 col-md-4"></div>
+    </div>
+</div>

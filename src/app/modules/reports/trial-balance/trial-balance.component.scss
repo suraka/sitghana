@@ -1,0 +1,33 @@
+@import "./../styles/app";
+.main-container {
+  margin-left: 235px;
+  padding: 15px;
+  -ms-overflow-x: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+  overflow: hidden;
+}
+@media screen and (max-width: 992px) {
+  .main-container {
+      margin-left: 0px !important;
+  }
+}
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+.custom-day.focused {
+  background-color: #e6e6e6;
+}
+.custom-day.range, .custom-day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+.custom-day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}

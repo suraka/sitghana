@@ -1,0 +1,50 @@
+<app-sidebar></app-sidebar>
+<section class="main-container">
+  <div [@routerTransition]>
+    <h2 class="text-muted">Trial Balance</h2>
+    <hr />
+    <div class="row">
+      <div class="col-lg-8">
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <label for="from">From</label>
+              <input class="form-control ml-2" placeholder="yyyy-mm-dd"
+                      name="d2" #c2="ngModel" [(ngModel)]="fromDate" (navigate)="date = $event.next" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                  <i class="fas fa-calendar-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="input-group ml-4">
+              <label for="from">To</label>
+              <input class="form-control ml-2" placeholder="yyyy-mm-dd"
+                      name="d3" #c3="ngModel" [(ngModel)]="toDate" (navigate)="date = $event.next" ngbDatepicker #d3="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d3.toggle()" type="button">
+                  <i class="fas fa-calendar-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr/>
+        <div class="d-flex justify-content-center">
+          <div class="p-1 bd-highlight text-center">
+            <h4 class="font-weight-bold">{{ businesses[0].businessName | titlecase }}</h4>
+            <h5 class="font-weight-normal">Trial Balance</h5>
+            <p>as at {{ toDate.day + '/' + toDate.month + '/' + toDate.year }}</p>
+          </div>
+        </div>
+        <hr/>
+        <div class="d-flex bd-highlight">
+          <div class="p-2 flex-grow-1 bd-highlight">Flex item</div>
+          <div class="p-2 bd-highlight">Flex item</div>
+          <div class="p-2 bd-highlight">Third flex item</div>
+        </div>
+      </div>
+      <div class="col-lg-4"></div>
+    </div>
+  </div>
+</section>  

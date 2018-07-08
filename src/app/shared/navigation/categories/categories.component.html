@@ -1,0 +1,10 @@
+<!-- Categories - Filters -->
+<section class="categories p-3 bg-light">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <a *ngFor="let category of categories" [routerLink]="['../filter']" [queryParams]="{ f: category }" routerLinkActive="active" class="badge badge-pill badge-secondary mx-auto text-xl-left font-weight-normal">
+          {{ category | titlecase }}
+      </a>
+    </div>
+  </div>
+</section>

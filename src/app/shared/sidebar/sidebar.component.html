@@ -1,0 +1,654 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <div class="list-group">
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="expandBusinessClass('business')">
+                <span><i class="fab fa-pushed"></i>&nbsp; {{ businessName | titlecase }}</span>
+            </a>
+            <li class="nested" [class.expand]="showBusinessMenu === 'business'">
+                <ul class="submenu">
+                    <li *ngFor="let business of businesses">
+                        <a (click)="createBusinessModal(businessModalTitle, businessModalContent, businessModalFooter)">
+                            <span><i class="fas fa-fw fa-wrench"></i>&nbsp;{{ 'Business Settings' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createSupplierModal(supplierModalTitle, supplierModalContent, supplierModalFooter)">
+                            <span><i class="fas fa-user-friends"></i>&nbsp;{{ 'Add Suppliers' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createRawMaterialModal(rawMaterialModalTitle, rawMaterialModalContent, rawMaterialModalFooter)">
+                            <span><i class="fas fa-shopping-bag"></i>&nbsp;{{ 'Add Raw Materials' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createWorkInProgressModal(workInProgressModalTitle, workInProgressModalContent, workInProgressModalFooter)">
+                            <span><i class="fas fa-asterisk"></i>&nbsp;{{ 'Add Work in Progress' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createFinishedGoodsModal(finishedGoodsModalTitle, finishedGoodsModalContent, finishedGoodsModalFooter)">
+                            <span><i class="fab fa-bity"></i>&nbsp;{{ 'Add Finished Goods' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createFactoryExpenditureModal(factoryExpenditureModalTitle, factoryExpenditureModalContent, factoryExpenditureModalFooter)">
+                            <span><i class="fas fa-coins"></i>&nbsp;{{ 'Add Factory Exp.' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a  (click)="createFixedAssetModal(fixedAssetModalTitle, fixedAssetModalContent, fixedAssetModalFooter)">
+                            <span><i class="fas fa-truck"></i>&nbsp;{{ 'Add Fixed Assets' }}</span>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a (click)="createCustomerModal(customerModalTitle, customerModalContent, customerModalFooter)">
+                            <span><i class="fas fa-users"></i>&nbsp;{{ 'Add Customers' }}</span>
+                        </a>
+                    </li> -->
+                </ul>
+            </li>
+        </div>
+        <a routerLink="./../dashboard" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fas fa-fw fa-tachometer-alt"></i>&nbsp;{{ 'Dashboard' }}
+        </a>
+        <a [routerLink]="['./../inventory']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fas fa-fw fa-cubes"></i>&nbsp;{{ 'Inventory Management' }}
+        </a>
+
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="expandReportsClass('reports')">
+                <span><i class="fas fa-bars"></i>&nbsp; Reports</span>
+            </a>
+            <li class="nested" [class.expand]="showReportsMenu === 'reports'">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLink]="['./../manufacturing']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fas fa-fw fa-table"></i>&nbsp;{{ 'Manufacturing A/C' }}
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['./../trial-balance']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fas fa-fw fa-columns"></i>&nbsp;{{ 'Trial Balance' }}
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['./../trading']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fas fa-fw fa-exchange-alt"></i>&nbsp;{{ 'Trading A/C' }}
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['./../profit-loss']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fa fa-fw fa-receipt"></i>{{ 'P & L A/C' }}
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['./../income-statement']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fas fa-fw fa-money-bill-alt"></i>&nbsp;{{ 'Income Statement' }}
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['./../balance-sheet']" [queryParams]="{ bid: bid, id: uid }" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fas fa-th-list"></i>&nbsp;{{ 'Balance Sheet' }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+        <!-- <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-file-o"></i>&nbsp;{{ 'Blank Page' }}
+        </a>
+        <a class="list-group-item more-themes" href="http://www.strapui.com/" >
+            {{ 'More Theme' }}
+        </a>
+        <div class="header-fields">
+            <a (click)="rltAndLtr()" class="list-group-item">
+                <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
+            </a>
+            <div class="nested-menu">
+                <a class="list-group-item" (click)="addExpandClass('languages')">
+                    <span><i class="fa fa-language"></i>&nbsp; {{ 'Language' }} <b class="caret"></b></span>
+                </a>
+                <li class="nested" [class.expand]="showMenu === 'languages'">
+                    <ul class="submenu">
+                        <li>
+                            <a href="javascript:void(0)" (click)="changeLang('en')">
+                                {{ 'English' }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" (click)="changeLang('fr')">
+                                {{ 'French' }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+            <div class="nested-menu">
+                <a class="list-group-item" (click)="addExpandClass('profile')">
+                    <span><i class="fa fa-user"></i>&nbsp; John Smith</span>
+                </a>
+                <li class="nested" [class.expand]="showMenu === 'profile'">
+                    <ul class="submenu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/login']" (click)="onLoggedout()">
+                                <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </div> -->
+    </div>
+</nav>
+
+<!-- <button nz-button nzType="primary">
+    <span>Template</span>
+</button> -->
+
+<!-- Business Modal Form -->
+<form nz-form [formGroup]="addNewBusinessForm" (ngSubmit)="addNewBusiness(addNewBusinessForm.value)">
+    <ng-template #businessModalTitle>
+        <span>{{ businesses[0].businessName + ' settings' | titlecase }}</span>
+    </ng-template>
+    <ng-template #businessModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="name" value="{{ businesses[0].businessName | titlecase }}" placeholder="Enter business name">
+                <nz-form-explain *ngIf="addNewBusinessForm.get('name').dirty && addNewBusinessForm.get('name').errors ">
+                    <ng-container *ngIf="addNewBusinessForm.get('name').hasError('required')">
+                    Please input the name of your business!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>
+            <nz-form-control [nzSpan]="12" [nzOffset]="7">
+                <label nz-checkbox formControlName="isManufacturing">
+                    {{ businesses[0].manufacturing ? ((addNewBusinessForm.value['name'] | titlecase) + ' is a manufacturing business') : 'Is your business into manufacturing?' }} 
+                </label>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control [nzSpan]="12" [nzOffset]="7">
+                <label nz-checkbox formControlName="isTrading">
+                    {{ businesses[0].trading ? ((addNewBusinessForm.value['name'] | titlecase) + ' is a trading business') : 'Is your business into trading?' }} 
+                </label>
+            </nz-form-control>
+        </nz-form-item> -->
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7">Email</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+            <input nz-input formControlName="email" value="{{ businesses[0].email }}" placeholder="Enter email address" type="email">
+            <nz-form-explain *ngIf="addNewBusinessForm.get('email').dirty && addNewBusinessForm.get('email').errors">
+                <ng-container *ngIf="addNewBusinessForm.get('email').hasError('email')">
+                The input is not valid email!
+                </ng-container>
+            </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Phone</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="phone" value="{{ businesses[0].phone }}" placeholder="Enter business phone number">
+                <nz-form-explain *ngIf="addNewBusinessForm.get('phone').dirty && addNewBusinessForm.get('phone').hasError('required')">
+                    Please input business phone number!
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Location</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="location" value="{{ businesses[0].location }}" placeholder="Enter business location">
+                <nz-form-explain *ngIf="addNewBusinessForm.get('location').dirty && addNewBusinessForm.get('location').errors">
+                    <ng-container *ngIf="addNewBusinessForm.get('location').hasError('required')">
+                    Please enter business location!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Describe business</nz-form-label>
+            <nz-form-control [nzSpan]="12" >
+                <textarea formControlName="about" nz-input rows="2" value="{{ businesses[0].about }}" placeholder="Write brief information about your business"></textarea>
+                <nz-form-explain *ngIf="addNewBusinessForm.get('about').dirty && addNewBusinessForm.get('about').hasError('required')">
+                    Please write something about the business
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7">Depreciation</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="depreciation" placeholder="Select a method of depreciation below">
+                    <nz-option nzValue="true" nzLabel="Straight Line"></nz-option>
+                    <nz-option nzValue="true" nzLabel="Double Declining Balance"></nz-option>
+                    <nz-option nzValue="true" nzLabel="Units of Production"></nz-option>
+                    <nz-option nzValue="true" nzLabel="Sum of Years Digits"></nz-option>
+                </nz-select>
+                <!-- <nz-select nz-input formControlName="depreciation" placeholder="Select method of depreciation below">
+                    <nz-option *ngIf="{{ businesses[0].depreciation.straightLine ? selected }}" nzValue="true" nzLabel="Straight Line"></nz-option>
+                    <nz-option  *ngIf="{{ businesses[0].depreciation.doubleDecliningBalance ? selected }}" nzValue="true" nzLabel="Double Declining Balance"></nz-option>
+                    <nz-option *ngIf="{{ businesses[0].depreciation.unitsOfProduction ? selected }}" nzValue="true" nzLabel="Units of Productions"></nz-option>
+                    <nz-option *ngIf="{{ businesses[0].depreciation.sumOfYearsDigits ? selected }}" nzValue="true" nzLabel="Sum of Years Digits"></nz-option>
+                </nz-select> -->
+                <nz-form-explain *ngIf="addNewBusinessForm.get('depreciation').dirty && addNewBusinessForm.get('depreciation').errors">
+                    <ng-container *ngIf="addNewBusinessForm.get('depreciation').hasError('depreciation')">
+                        Select a method of depreciation!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #businessModalFooter>
+        <button nz-button nzType="danger" (click)="closeBusinessModal()">Close</button>
+        <button nz-button (click)="resetNewBusinessForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewBusiness()" [disabled]="!addNewBusinessForm.valid" [nzLoading]="businessModalButtonLoading">
+            Save changes to {{ addNewBusinessForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Business Modal -->
+
+<!-- Supplier Modal Form -->
+<form nz-form [formGroup]="addNewSupplierForm" (ngSubmit)="addNewSupplier(addNewSupplierForm.value)">
+    <ng-template #supplierModalTitle>
+        <span>{{ 'Add Supplier' }}</span>
+    </ng-template>
+    <ng-template #supplierModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+            <input nz-input formControlName="name" placeholder="Enter supplier's name">
+            <nz-form-explain *ngIf="addNewSupplierForm.get('name').dirty && addNewSupplierForm.get('name').errors ">
+                <ng-container *ngIf="addNewSupplierForm.get('name').hasError('required')">
+                Please input supplier's name!
+                </ng-container>
+            </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7">Email</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="email" placeholder="Email (optional)" type="email">
+                <nz-form-explain *ngIf="addNewSupplierForm.get('email').dirty && addNewSupplierForm.get('email').errors">
+                    <ng-container *ngIf="addNewSupplierForm.get('email').hasError('email')">
+                    The input is not valid email!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Phone</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="phone" placeholder="Enter supplier's phone number">
+                <nz-form-explain *ngIf="addNewSupplierForm.get('phone').dirty && addNewSupplierForm.get('phone').hasError('required')">
+                    Please input supplier's phone!
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Location</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="location" placeholder="Enter supplier's location">
+                <nz-form-explain *ngIf="addNewSupplierForm.get('location').dirty && addNewSupplierForm.get('location').errors">
+                    <ng-container *ngIf="addNewSupplierForm.get('location').hasError('required')">
+                    Please enter supplier's location!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Nature of business?</nz-form-label>
+            <nz-form-control [nzSpan]="12" >
+                <textarea formControlName="business" nz-input rows="2" placeholder="Write brief information about the supplier's business"></textarea>
+                <nz-form-explain *ngIf="addNewSupplierForm.get('business').dirty && addNewSupplierForm.get('business').hasError('required')">
+                    Please write something about the supplier
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #supplierModalFooter>
+        <button nz-button nzType="danger" (click)="closeSupplierModal()">Close</button>
+        <button nz-button (click)="resetNewSupplierForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewSupplier()" [disabled]="!addNewSupplierForm.valid" [nzLoading]="supplierModalButtonLoading">
+            Add {{ addNewSupplierForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Supplier's Modal -->
+
+<!-- Customer Modal Form -->
+<form nz-form [formGroup]="addNewCustomerForm" (ngSubmit)="addNewCustomer(addNewCustomerForm.value)">
+    <ng-template #customerModalTitle>
+        <span>{{ 'Add Customer' }}</span>
+    </ng-template>
+    <ng-template #customerModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="name" placeholder="Enter customer's name">
+                <nz-form-explain *ngIf="addNewCustomerForm.get('name').dirty && addNewCustomerForm.get('name').errors ">
+                    <ng-container *ngIf="addNewCustomerForm.get('name').hasError('required')">
+                    Please input customer's name!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7">Email</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+            <input nz-input formControlName="email" placeholder="Email (optional)" type="email">
+            <nz-form-explain *ngIf="addNewCustomerForm.get('email').dirty && addNewCustomerForm.get('email').errors">
+                <ng-container *ngIf="addNewCustomerForm.get('email').hasError('email')">
+                The input is not valid email!
+                </ng-container>
+            </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Phone</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="phone" placeholder="Enter customer's phone number">
+                <nz-form-explain *ngIf="addNewCustomerForm.get('phone').dirty && addNewCustomerForm.get('phone').hasError('required')">
+                    Please input supplier's phone!
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Location</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="location" placeholder="Enter customer's location">
+                <nz-form-explain *ngIf="addNewCustomerForm.get('location').dirty && addNewCustomerForm.get('location').errors">
+                    <ng-container *ngIf="addNewCustomerForm.get('location').hasError('required')">
+                    Please enter supplier's location!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Nature of business?</nz-form-label>
+            <nz-form-control [nzSpan]="12" >
+                <textarea formControlName="business" nz-input rows="2" placeholder="Write brief information about the customer's business"></textarea>
+                <nz-form-explain *ngIf="addNewCustomerForm.get('business').dirty && addNewCustomerForm.get('business').hasError('required')">
+                    Please write something about the supplier
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #customerModalFooter>
+        <button nz-button nzType="danger" (click)="closeCustomerModal()">Close</button>
+        <button nz-button (click)="resetNewCustomerForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewCustomer()" [disabled]="!addNewCustomerForm.valid" [nzLoading]="customerModalButtonLoading">
+            Add {{ addNewCustomerForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Customer's Modal -->
+
+<!-- Raw Material Modal Form -->
+<form nz-form [formGroup]="addNewRawMaterialForm" (ngSubmit)="addNewRawMaterial(addNewRawMaterialForm.value)">
+    <ng-template #rawMaterialModalTitle>
+        <span>{{ 'Add Raw Material' }}</span>
+    </ng-template>
+    <ng-template #rawMaterialModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="rawMaterial" placeholder="Enter raw material's name">
+                <nz-form-explain *ngIf="addNewRawMaterialForm.get('rawMaterial').dirty && addNewRawMaterialForm.get('rawMaterial').errors ">
+                    <ng-container *ngIf="addNewRawMaterialForm.get('rawMaterial').hasError('required')">
+                        Please input raw material's name!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Supplier</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="supplier" placeholder="Select a supplier">
+                    <nz-option *ngFor="let supplier of suppliers" nzValue="{{supplier.id+'-'+supplier.name+'-'+supplier.phone}}" nzLabel="{{supplier.name}}"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewRawMaterialForm.get('supplier').dirty && addNewRawMaterialForm.get('supplier').errors">
+                    <ng-container *ngIf="addNewRawMaterialForm.get('supplier').hasError('required')">
+                        Please select supplier of this raw material!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #rawMaterialModalFooter>
+        <button nz-button nzType="danger" (click)="closeRawMaterialModal()">Close</button>
+        <button nz-button (click)="resetNewRawMaterialForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewRawMaterial()" [disabled]="!addNewRawMaterialForm.valid" [nzLoading]="rawMaterialModalButtonLoading">
+            Add {{ addNewRawMaterialForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Raw Material Modal -->
+
+<!-- Work in Progress Modal Form -->
+<form nz-form [formGroup]="addNewWorkInProgressForm" (ngSubmit)="addNewWorkInProgress(addNewWorkInProgressForm.value)">
+    <ng-template #workInProgressModalTitle>
+        <span>{{ 'Add Work in Progress' }}</span>
+    </ng-template>
+    <ng-template #workInProgressModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="name" placeholder="Enter work in progress name">
+                <nz-form-explain *ngIf="addNewWorkInProgressForm.get('name').dirty && addNewWorkInProgressForm.get('name').errors ">
+                    <ng-container *ngIf="addNewWorkInProgressForm.get('name').hasError('required')">
+                        Please input name work in progress!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #workInProgressModalFooter>
+        <button nz-button nzType="danger" (click)="closeWorkInProgressModal()">Close</button>
+        <button nz-button (click)="resetNewWorkInProgressForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewWorkInProgress()" [disabled]="!addNewWorkInProgressForm.valid" [nzLoading]="workInProgressModalButtonLoading">
+            Add {{ addNewWorkInProgressForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Work in Progress Modal -->
+
+<!-- Finished Goods Modal Form -->
+<form nz-form [formGroup]="addNewFinishedGoodsForm" (ngSubmit)="addNewFinishedGoods(addNewFinishedGoodsForm.value)">
+    <ng-template #finishedGoodsModalTitle>
+        <span>{{ 'Add Finished Goods' }}</span>
+    </ng-template>
+    <ng-template #finishedGoodsModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="name" placeholder="Enter finished goods name">
+                <nz-form-explain *ngIf="addNewFinishedGoodsForm.get('name').dirty && addNewFinishedGoodsForm.get('name').errors ">
+                    <ng-container *ngIf="addNewFinishedGoodsForm.get('name').hasError('required')">
+                        Please input name of finished goods!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Customer</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="customer" placeholder="Select a customer">
+                    <nz-option *ngFor="let customer of customers" nzValue="{{customer.id+'-'+customer.name+'-'+customer.phone}}" nzLabel="{{customer.name}}"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewFinishedGoodsForm.get('customer').dirty && addNewFinishedGoodsForm.get('customer').errors">
+                    <ng-container *ngIf="addNewFinishedGoodsForm.get('customer').hasError('required')">
+                        Please select customer of this finished goods!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item> -->
+    </ng-template>
+    <ng-template #finishedGoodsModalFooter>
+        <button nz-button nzType="danger" (click)="closeFinishedGoodsModal()">Close</button>
+        <button nz-button (click)="resetNewFinishedGoodsForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewFinishedGoods()" [disabled]="!addNewFinishedGoodsForm.valid" [nzLoading]="finishedGoodsModalButtonLoading">
+            Add {{ addNewFinishedGoodsForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Finished Goods Modal -->
+
+<!-- Fixed Asset Modal Form -->
+<form nz-form [formGroup]="addNewFixedAssetForm" (ngSubmit)="addNewFixedAsset(addNewFixedAssetForm.value)">
+    <ng-template #fixedAssetModalTitle>
+        <span>{{ 'Add Fixed Asset' }}</span>
+    </ng-template>
+    <ng-template #fixedAssetModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+            <input nz-input formControlName="name" placeholder="Enter fixed asset's name">
+            <nz-form-explain *ngIf="addNewFixedAssetForm.get('name').dirty && addNewFixedAssetForm.get('name').errors ">
+                <ng-container *ngIf="addNewFixedAssetForm.get('name').hasError('required')">
+                    Please input fixed asset's name!
+                </ng-container>
+            </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Life span of asset</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="lifeOfAsset" placeholder="E.g: 10"> <!-- 10 years -->
+                <nz-form-explain *ngIf="addNewFixedAssetForm.get('lifeOfAsset').dirty && addNewFixedAssetForm.get('lifeOfAsset').hasError('required')">
+                    Please input life span of asset!
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>How much it cost?</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="cost" placeholder="Enter cost of asset">
+                <nz-form-explain *ngIf="addNewFixedAssetForm.get('cost').dirty && addNewFixedAssetForm.get('cost').errors">
+                    <ng-container *ngIf="addNewFixedAssetForm.get('cost').hasError('required')">
+                    Please enter the cost of this asset!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Seller</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="seller" placeholder="Enter seller's name">
+                <nz-form-explain *ngIf="addNewFixedAssetForm.get('seller').dirty && addNewFixedAssetForm.get('seller').errors">
+                    <ng-container *ngIf="addNewFixedAssetForm.get('seller').hasError('required')">
+                    Please enter the name of the seller!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Phone</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="sellersPhoneNumber" placeholder="Enter phone number of seller">
+                <nz-form-explain *ngIf="addNewFixedAssetForm.get('sellersPhoneNumber').dirty && addNewFixedAssetForm.get('sellersPhoneNumber').errors">
+                    <ng-container *ngIf="addNewFixedAssetForm.get('sellersPhoneNumber').hasError('required')">
+                    Please enter phone number of seller!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Location</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="sellersLocation" placeholder="Enter location of seller">
+                <nz-form-explain *ngIf="addNewFixedAssetForm.get('sellersLocation').dirty && addNewFixedAssetForm.get('sellersLocation').errors">
+                    <ng-container *ngIf="addNewFixedAssetForm.get('sellersLocation').hasError('required')">
+                    Please enter location of seller!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #fixedAssetModalFooter>
+        <button nz-button nzType="danger" (click)="closeFixedAssetModal()">Close</button>
+        <button nz-button (click)="resetNewFixedAssetForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewFixedAsset()" [disabled]="!addNewFixedAssetForm.valid" [nzLoading]="fixedAssetModalButtonLoading">
+            Add {{ addNewFixedAssetForm.value['name'] | titlecase }}
+        </button>
+    </ng-template>
+</form>
+<!-- End Fixed Asset Modal -->
+
+<!-- Factory Expenditure Modal Form -->
+<form nz-form [formGroup]="addNewFactoryExpenditureForm" (ngSubmit)="addNewFactoryExpenditure(addNewFactoryExpenditureForm.value)">
+    <ng-template #factoryExpenditureModalTitle>
+        <span>{{ 'Add New Factory Expenditure' }}</span>
+    </ng-template>
+    <ng-template #factoryExpenditureModalContent>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Expenditure</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <nz-select nz-input formControlName="expenses" placeholder="Select a factory expenditure">
+                    <nz-option nzValue="carriage on raw materials-carriage" nzLabel="Carriage on raw materials"></nz-option>
+                    <nz-option nzValue="direct wages-direct" nzLabel="Direct Wages"></nz-option>
+                    <nz-option nzValue="direct expenses-direct" nzLabel="Direct Expenses"></nz-option>
+                    <nz-option nzValue="indirect wages-indirect" nzLabel="Indirect Wages"></nz-option>
+                    <nz-option nzValue="factory rent & rates-indirect" nzLabel="Factory Rent & Rates"></nz-option>
+                    <nz-option nzValue="factory insurance-indirect" nzLabel="Factory Insurance"></nz-option>
+                    <nz-option nzValue="factory fuel & power-indirect" nzLabel="Factory Fuel & Power"></nz-option>
+                    <nz-option nzValue="factory general expenses-indirect" nzLabel="Factory General Expenses"></nz-option>
+                    <nz-option nzValue="factory utilities-indirect" nzLabel="Factory Utilities"></nz-option>
+                    <nz-option nzValue="equipment setup costs-indirect" nzLabel="Equipment Setup Costs"></nz-option>
+                    <nz-option nzValue="equipment maintenance-indirect" nzLabel="Equipment Maintenance"></nz-option>
+                    <nz-option nzValue="factory small tools-indirect" nzLabel="Factory Small Tools"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addNewFactoryExpenditureForm.get('expenses').dirty && addNewFactoryExpenditureForm.get('expenses').errors ">
+                    <ng-container *ngIf="addNewFactoryExpenditureForm.get('expenses').hasError('required')">
+                        Please select factory expenditure!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Amount</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <input nz-input formControlName="amount" placeholder="Enter amount" type="number">
+                <nz-form-explain *ngIf="addNewFactoryExpenditureForm.get('amount').dirty && addNewFactoryExpenditureForm.get('amount').errors">
+                    <ng-container *ngIf="addNewFactoryExpenditureForm.get('amount').hasError('required')">
+                        The input is not a valid amount!
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback>
+                <textarea formControlName="description" nz-input rows="2" placeholder="Write brief information about the expenditure"></textarea>
+                <nz-form-explain *ngIf="addNewFactoryExpenditureForm.get('description').dirty && addNewFactoryExpenditureForm.get('description').hasError('required')">
+                    Please describe the expenditure!
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </ng-template>
+    <ng-template #factoryExpenditureModalFooter>
+        <button nz-button nzType="danger" (click)="closeFactoryExpenditureModal()">Close</button>
+        <button nz-button (click)="resetNewFactoryExpenditureForm($event)">Reset</button>
+        <button nz-button nzType="primary" (click)="processingNewFactoryExpenditure()" [disabled]="!addNewFactoryExpenditureForm.valid" [nzLoading]="factoryExpenditureModalButtonLoading">
+            Add Expenditure
+        </button>
+    </ng-template>
+</form>
+<!-- End Inventory Modal -->

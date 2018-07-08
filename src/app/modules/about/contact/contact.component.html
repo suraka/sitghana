@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row flex-items-xs-middle">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="py-5 text-center">
+        <i class="fab fa-angrycreative fa-2x"></i>
+        <h2>Contact Us</h2>
+        <p class="lead">Call our telephone lines below or send us a message. We will respond appropriately and timely to all enquiries or concerns. Thank you.</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 mb-3">
+          <label for="country">Call: </label> {{ setting.phone }} <!-- 0555980771 / 0509392275 -->
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="state">Email: </label> {{ setting.email }}
+        </div>
+      </div>
+      <hr class="mb-4">
+
+        <form (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName">First name</label>
+              <input type="text" [(ngModel)]="entry.first" name="first" class="form-control" id="firstName" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid first name is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName">Last name</label>
+              <input type="text" [(ngModel)]="entry.last" name="last" class="form-control" id="lastName" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid last name is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="phone">Phone</label>            
+            <input type="text" [(ngModel)]="entry.phone" name="phone" class="form-control" id="phone" placeholder="e.g.: {{ setting.phone }}" required>
+            <div class="invalid-feedback" style="width: 100%;">
+              Your phone number is required.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email">Email <span class="text-muted">(Optional)</span></label>
+            <input type="email" [(ngModel)]="entry.email" name="email" class="form-control" id="email" placeholder="e.g.: {{ setting.email }}">
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea [(ngModel)]="entry.message" name="message" class="form-control" id="message" rows="3" required></textarea>
+            <div class="invalid-feedback">
+              Please enter your enqueries.
+            </div>
+          </div>
+
+          <hr class="mb-4">
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Send</button>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>    

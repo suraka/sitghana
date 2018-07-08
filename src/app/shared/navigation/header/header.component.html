@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-sm fixed-top navbar-dark d-flex flex-md-row p-2 px-md-4 bg-color">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand my-0 font-weight-normal text-white" [routerLink]="['']">
+        <i class="fab fa-angrycreative"></i>
+        Sit Ghana
+      </a>
+      <ul class="navbar-nav mr-auto align-middle">
+        <li class="nav-item" routerLinkActive="activeFilter">
+          <a class="p-2 text-white font-weight-normal" [routerLink]="['home']"> <!--  *ngIf="!(auth.user | async);" -->
+            Home
+          </a>
+        </li>
+        <!-- <li class="nav-item" routerLinkActive="activeFilter">
+          <a class="p-2 text-white font-weight-normal" [routerLink]="['about']">
+            About
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="activeFilter">
+          <a class="p-2 text-white font-weight-normal" [routerLink]="['features']">
+            Features
+          </a>
+        </li> -->
+        <li class="nav-item" routerLinkActive="activeFilter">
+          <a class="p-2 text-white font-weight-normal" [routerLink]="['contact']">
+            Contact
+          </a>
+        </li>
+      </ul>
+  
+      <nav class="my-2 my-md-0 mr-md-3" *ngIf="authService.user | async">
+        <a class="p-2 text-white font-weight-normal" [routerLink]="['profile']">Profile</a>
+        <a class="p-2 text-white font-weight-normal" (click)="authService.signOut()">Logout</a>
+      </nav>
+    
+      <!-- <a class="text-white btn btn-outline-success font-weight-normal mr-2" [routerLink]="['profile']">
+          <i class="fab fa-pushed"></i> Add Transaction
+      </a> -->
+      <a class="text-white btn btn-outline-warning font-weight-normal" [routerLink]="['profile']" *ngIf="!(authService.user | async);">
+        Get started
+      </a>
+      
+    </div>
+</nav>
